@@ -1,0 +1,35 @@
+  name: Claude Issue Dedupe
+  description: Automatically dedupe GitHub issues using Claude Code
+  on:
+    issues:
+      types: [opened]
+    workflow_dispatch:
+      inputs:
+        issue_number:
+          description: 'Issue number to process for duplicate detection'
+          required: true
+          type: string
+
+  jobs:
+    claude-dedupe-issues:
+      runs-on: ubuntu-latest
+      timeout-minutes: 10
+      permissions:
+        contents: read
+        issues: write
+        id-token: write
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Run Claude Code slash command
+          uses: anthropics/claude-code-action@v1
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            allowed_non_write_users: "*"
+            prompt: "/dedupe ${{ github.repository }}/issues/${{ github.event.issue.number || inputs.issue_number }}"
+            anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+            claude_args: "--model claude-sonnet-4-5-20250929"
