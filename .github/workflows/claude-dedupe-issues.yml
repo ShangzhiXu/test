@@ -25,12 +25,4 @@
             allowed_non_write_users: "*"
             anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
             prompt: |
-              Analyze this GitHub issue and check if it's a duplicate.
-
-              Issue: ${{ github.repository }}/issues/${{ github.event.issue.number }}
-
-              Steps:
-              1. Use gh to view the issue details
-              2. Search for similar issues
-              3. Post a summary comment on the issue
-            allowed_tools: "Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh issue comment:*)"
+              Use gh to view issue ${{ github.event.issue.number }} in this repo, then post a short comment summarizing it.
