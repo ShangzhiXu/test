@@ -1,4 +1,4 @@
-  name: Claude Issue Analyzer
+ name: Claude Issue Analyzer
   on:
     issues:
       types: [opened]
@@ -24,5 +24,7 @@
             github_token: ${{ secrets.GITHUB_TOKEN }}
             allowed_non_write_users: "*"
             anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+            show_full_output: true
+            claude_args: '--allowedTools "Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue comment:*)"'
             prompt: |
               Use gh to view issue ${{ github.event.issue.number }} in this repo, then post a short comment summarizing it.
